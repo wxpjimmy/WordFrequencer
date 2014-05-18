@@ -29,3 +29,4 @@ MAX_SLEEP_INTERVAL = 10
 DBHOST = "localhost"
 DBNAME = 'Sight'
 TABLENAME = 'Dictionary'
+DUMP_DICFILE = 'mac_dictonary.txt'

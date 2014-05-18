@@ -110,6 +110,33 @@ class DBAdapter(object):
     def check_exist(self, words):
         pass
 
+
+    def dump_all(self, targetfile=DUMP_DICFILE):
+        try:
+            conn=MySQLdb.connect(host=DBHOST,user=self._user,passwd=self._passwd,port=self._port, charset=self._encoding)
+            cur=conn.cursor()            
+            conn.select_db(DBNAME)
+
+            query_all = 'select * from %s' % TABLENAME
+            count = cur.execute(query_all)
+            print("Total words: %d" % count)
+            results = cur.fetchall()
+            with open(targetfile, 'w+') as handler:
+                for item in results:
+                    handler.write(item[0] + '\t' + str(item[1])
+                    handler.write('\n')
+
+            conn.commit()
+            cur.close()
+            conn.close()
+        except MySQLdb.Error,e:
+            print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+            if cur:
+                cur.close()
+            if conn:
+                conn.close()
+            raise e
+
 if __name__ == '__main__':
     adpt = DBAdapter("root", "hohoyi123")
     adpt.create_db_or_table_if_not_exist()
